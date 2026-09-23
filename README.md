@@ -19,7 +19,7 @@ For each moment a reviewer wants:
 
 1. On YouTube: **Share → tick "Start at" → Copy**, then paste the link into the page.
    The timestamp comes across in the URL, so nothing has to be typed by hand.
-2. Type roughly what was said.
+2. Give it a short title and type roughly what was said. Both are required.
 3. Add an optional end time, a note, and a priority.
 
 When they're done, **Copy CSV** and send it to the editor.
@@ -39,7 +39,7 @@ session,t_in,t_out,title,quote,description,priority,marked_by
 | `session` | `1761`–`1765`, matching the footage folder names |
 | `t_in` | `HH:MM:SS` from the **start of the YouTube stream** |
 | `t_out` | Same format; may be empty |
-| `title` | Short headline — what the finished clip gets called; may be empty |
+| `title` | Short headline — what the finished clip gets called; **required** |
 | `quote` | Roughly what was said — required |
 | `description` | A sentence of context for whoever cuts it; may be empty |
 | `priority` | `1` must cut, `2` good, `3` maybe |

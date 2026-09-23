@@ -372,6 +372,7 @@
       <p><strong>Don’t hunt for the exact frame.</strong> Within about half a minute is fine. The quote is what pins it down precisely.</p>
       <p><strong>You don’t have to pick the session by hand.</strong> Paste a link from any of the five streams and the page works out which session it belongs to. If it says the link isn’t one of the five, you’re on a different video.</p>
       <p><strong>When you’re done,</strong> hit <em>Copy CSV</em> and send it to Conrad. Your marks stay in this browser, so you can close the tab and come back — but they don’t reach anyone until you send them.</p>
+      <p><strong>A title and a quote are both required</strong> — everything else is optional.</p>
       <p>Columns are <code>session, t_in, t_out, title, quote, description, priority, marked_by</code>.</p>
     </div>
   </details>
@@ -658,7 +659,8 @@
   function validate(){
     var tin=parseInput(elIn.value);
     var tout=parseInput(elOut.value);
-    var ok = tin!=null && elQuote.value.trim().length>0 && (tout==null||tout>tin);
+    var ok = tin!=null && elQuote.value.trim().length>0
+             && elSnipTitle.value.trim().length>0 && (tout==null||tout>tin);
     elAdd.disabled=!ok;
     return ok;
   }
@@ -734,6 +736,7 @@
   });
   elOut.addEventListener('input',updateResolved);
   elQuote.addEventListener('input',validate);
+  elSnipTitle.addEventListener('input',validate);
   elAdd.addEventListener('click',addMark);
 
   document.addEventListener('keydown',function(e){
