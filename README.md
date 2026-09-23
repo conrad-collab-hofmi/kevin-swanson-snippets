@@ -6,9 +6,13 @@ livestreams (recorded 2026-09-17), so snippets can be cut from the multicam late
 Reviewers watch the stream on YouTube and log the moments worth cutting. The page
 produces a CSV that goes back to the editor.
 
+**Live page → https://conrad-collab-hofmi.github.io/kevin-swanson-snippets/**
+
+No sign-in, no install. Open it in a browser and start marking.
+
 ## Using it
 
-`snippet-log.html` is self-contained — no build step, no dependencies. Open it in a
+`index.html` is self-contained — no build step, no dependencies. Open it in a
 browser, or publish it and share the link.
 
 For each moment a reviewer wants:
