@@ -30,8 +30,8 @@ safe — but nothing reaches anyone until the CSV is sent.
 ## Output
 
 ```csv
-session,t_in,t_out,quote,note,priority,marked_by
-1763,00:41:30,00:42:45,"if you don't disciple your children, the world will",strong cold open,1,Dana
+session,t_in,t_out,title,quote,description,priority,marked_by
+1761,00:41:30,00:42:45,"Disciple Your Children, Or The World Will","if you don't disciple your children, the world will","Kevin's case that discipleship isn't optional.",1,Dana
 ```
 
 | Column | Notes |
@@ -39,8 +39,9 @@ session,t_in,t_out,quote,note,priority,marked_by
 | `session` | `1761`–`1765`, matching the footage folder names |
 | `t_in` | `HH:MM:SS` from the **start of the YouTube stream** |
 | `t_out` | Same format; may be empty |
+| `title` | Short headline — what the finished clip gets called; may be empty |
 | `quote` | Roughly what was said — required |
-| `note` | Why it's worth cutting; may be empty |
+| `description` | A sentence of context for whoever cuts it; may be empty |
 | `priority` | `1` must cut, `2` good, `3` maybe |
 | `marked_by` | Reviewer's name; may be empty |
 

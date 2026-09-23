@@ -196,18 +196,21 @@
   ol.marks{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
   li.mark{
     background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
-    padding:11px 13px;display:grid;grid-template-columns:auto 1fr auto;gap:4px 13px;
-    align-items:start;
+    padding:11px 13px;display:flex;gap:13px;align-items:flex-start;
   }
+  li.mark .body{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px}
   li.mark.is-example{border-style:dashed;background:transparent}
   .tc{
-    grid-row:1/span 2;font-family:'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;
+    flex:none;font-family:'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;
     font-size:13px;font-weight:600;color:var(--accent);padding-top:1px;white-space:nowrap;
   }
   .tc small{display:block;font-size:10.5px;font-weight:400;color:var(--ink-3)}
-  .qt{font-size:14px;line-height:1.4;overflow-wrap:anywhere}
+  .ti{font-size:14.5px;font-weight:600;line-height:1.35;overflow-wrap:anywhere}
+  .qt{font-size:14px;line-height:1.4;overflow-wrap:anywhere;color:var(--ink-2)}
+  .ti + .qt{font-size:12.5px;color:var(--ink-3)}
+  .ds{font-size:12.5px;line-height:1.45;color:var(--ink-2);overflow-wrap:anywhere}
   .meta{
-    grid-column:2;font-size:11.5px;color:var(--ink-3);
+    font-size:11.5px;color:var(--ink-3);margin-top:2px;
     display:flex;gap:8px;flex-wrap:wrap;align-items:center;
   }
   .chip{
@@ -323,8 +326,15 @@
     </div>
 
     <div class="field">
-      <label for="note">Why it’s good <span class="hint">— optional</span></label>
-      <input type="text" id="note" placeholder="strong cold open" autocomplete="off">
+      <label for="title">What is the title for the snippet?</label>
+      <input type="text" id="title" placeholder="Disciple Your Children, Or The World Will" autocomplete="off">
+      <div class="hint">A short headline — this is what the finished clip gets called.</div>
+    </div>
+
+    <div class="field">
+      <label for="desc">What is it about? <span class="hint">— optional</span></label>
+      <textarea id="desc" placeholder="Kevin makes the case that discipleship isn’t optional — something always fills the gap."></textarea>
+      <div class="hint">A sentence or two of context, for whoever cuts and captions it.</div>
     </div>
 
     <div class="field">
@@ -362,7 +372,7 @@
       <p><strong>Don’t hunt for the exact frame.</strong> Within about half a minute is fine. The quote is what pins it down precisely.</p>
       <p><strong>You don’t have to pick the session by hand.</strong> Paste a link from any of the five streams and the page works out which session it belongs to. If it says the link isn’t one of the five, you’re on a different video.</p>
       <p><strong>When you’re done,</strong> hit <em>Copy CSV</em> and send it to Conrad. Your marks stay in this browser, so you can close the tab and come back — but they don’t reach anyone until you send them.</p>
-      <p>Columns are <code>session, t_in, t_out, quote, note, priority, marked_by</code>.</p>
+      <p>Columns are <code>session, t_in, t_out, title, quote, description, priority, marked_by</code>.</p>
     </div>
   </details>
 </main>
@@ -391,8 +401,16 @@
   var KEY='swanson-snippet-log-v1', WHOKEY='swanson-snippet-who';
 
   var EXAMPLES=[
-    {id:'ex1',session:'1763',tIn:2490,tOut:2565,quote:'if you don’t disciple your children, the world will',note:'strong cold open',prio:1,by:'',example:true},
-    {id:'ex2',session:'1763',tOut:null,tIn:3735,quote:'I was wrong about that for twenty years',note:'vulnerable, lands well on its own',prio:2,by:'',example:true}
+    {id:'ex1',session:'1761',tIn:2490,tOut:2565,
+     quote:'if you don’t disciple your children, the world will',
+     title:'Disciple Your Children, Or The World Will',
+     desc:'Kevin’s case that discipleship isn’t optional — something always fills the gap.',
+     prio:1,by:'',example:true},
+    {id:'ex2',session:'1761',tIn:3735,tOut:null,
+     quote:'I was wrong about that for twenty years',
+     title:'Twenty Years Wrong',
+     desc:'A short admission of changing his mind. Lands on its own with no set-up.',
+     prio:2,by:'',example:true}
   ];
 
   var marks=[], cur='1761', prio=1, who='';
@@ -401,7 +419,15 @@
   function load(){
     try{
       var raw=localStorage.getItem(KEY);
-      if(raw){ marks=JSON.parse(raw)||[]; }
+      if(raw){
+        marks=JSON.parse(raw)||[];
+        /* marks saved before the note field became a title */
+        marks.forEach(function(m){
+          if(m.title===undefined){ m.title=m.note||''; }
+          if(m.desc===undefined){ m.desc=''; }
+          delete m.note;
+        });
+      }
       else { marks=EXAMPLES.slice(); }
       who=localStorage.getItem(WHOKEY)||'';
     }catch(e){ marks=EXAMPLES.slice(); who=''; }
@@ -465,7 +491,8 @@
   /* ---------- dom ---------- */
   var $=function(id){return document.getElementById(id)};
   var elSessions=$('sessions'), elList=$('list'), elEmpty=$('empty'),
-      elIn=$('tin'), elOut=$('tout'), elQuote=$('quote'), elNote=$('note'),
+      elIn=$('tin'), elOut=$('tout'), elQuote=$('quote'),
+      elSnipTitle=$('title'), elDesc=$('desc'),
       elResolved=$('resolved'), elAdd=$('add'), elWho=$('who'),
       elTot=$('tot'), elCount=$('listcount'), elTitle=$('listtitle'),
       elBanner=$('examplebanner'), elToast=$('toast');
@@ -532,10 +559,29 @@
       }
       li.appendChild(tc);
 
+      var body=document.createElement('div');
+      body.className='body';
+
+      if(m.title){
+        var ti=document.createElement('div');
+        ti.className='ti';
+        ti.textContent=m.title;
+        body.appendChild(ti);
+      }
+
       var qt=document.createElement('div');
       qt.className='qt';
       qt.textContent='“'+m.quote+'”';
-      li.appendChild(qt);
+      body.appendChild(qt);
+
+      if(m.desc){
+        var ds=document.createElement('div');
+        ds.className='ds';
+        ds.textContent=m.desc;
+        body.appendChild(ds);
+      }
+
+      li.appendChild(body);
 
       var del=document.createElement('button');
       del.className='del'; del.type='button';
@@ -558,17 +604,12 @@
         ex.className='chip'; ex.textContent='example';
         meta.appendChild(ex);
       }
-      if(m.note){
-        var nt=document.createElement('span');
-        nt.textContent=m.note;
-        meta.appendChild(nt);
-      }
       if(m.by){
         var by=document.createElement('span');
         by.textContent='· '+m.by;
         meta.appendChild(by);
       }
-      li.appendChild(meta);
+      body.appendChild(meta);
 
       elList.appendChild(li);
     });
@@ -628,11 +669,13 @@
     marks.push({
       id:'m'+Date.now()+Math.random().toString(36).slice(2,7),
       session:cur, tIn:tin, tOut:tout,
-      quote:elQuote.value.trim(), note:elNote.value.trim(),
+      quote:elQuote.value.trim(),
+      title:elSnipTitle.value.trim(), desc:elDesc.value.trim(),
       prio:prio, by:who
     });
     save();
-    elIn.value=''; elOut.value=''; elQuote.value=''; elNote.value='';
+    elIn.value=''; elOut.value=''; elQuote.value='';
+    elSnipTitle.value=''; elDesc.value='';
     elResolved.textContent=''; elResolved.className='resolved mono';
     renderSessions(); renderList(); updateTotals(); validate();
     elIn.focus();
@@ -650,11 +693,11 @@
       if(a.session!==b.session) return a.session<b.session?-1:1;
       return a.tIn-b.tIn;
     });
-    var out=['session,t_in,t_out,quote,note,priority,marked_by'];
+    var out=['session,t_in,t_out,title,quote,description,priority,marked_by'];
     rows.forEach(function(m){
       out.push([
         m.session, fmtCsv(m.tIn), fmtCsv(m.tOut),
-        esc(m.quote), esc(m.note), m.prio, esc(m.by)
+        esc(m.title), esc(m.quote), esc(m.desc), m.prio, esc(m.by)
       ].join(','));
     });
     return out.join('\n');
