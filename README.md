@@ -54,13 +54,19 @@ phrase is meant. Reviewers can be ~30s off at no cost, which is the whole point.
 Times are the source recording runtimes, used by the page to flag a timestamp that
 lands past the end of a session (usually a sign the wrong session was selected).
 
-| Session | Runtime | Note |
-| --- | --- | --- |
-| 1761 | ~145 min | Contains a recording restart ~62 min in |
-| 1762 | ~45 min | |
-| 1763 | ~66 min | |
-| 1764 | ~41 min | |
-| 1765 | ~74 min | |
+| Session | Title | Runtime | Stream |
+| --- | --- | --- | --- |
+| 1761 | How Should You Teach Your Children | ~145 min | [BfvcDfdTD_4](https://youtube.com/live/BfvcDfdTD_4) |
+| 1762 | 10 Principles in Education | ~45 min | [d_cMRbvAtLI](https://youtube.com/live/d_cMRbvAtLI) |
+| 1763 | Which Curriculum: What Do We Teach? | ~66 min | [FpJJKVkaQlQ](https://youtube.com/live/FpJJKVkaQlQ) |
+| 1764 | Facing the Political and Cultural Barriers | ~41 min | [FmD_uX9Fx1w](https://youtube.com/live/FmD_uX9Fx1w) |
+| 1765 | Q&A with Kevin Swanson & Bill Jack | ~74 min | [nwpRtjTbG0o](https://youtube.com/live/nwpRtjTbG0o) |
+
+Session 1761 contains a recording restart about 62 minutes in.
+
+The five streams are built into the page: each session links straight out to its
+video, and pasting a link from any of them selects the matching session
+automatically, so a reviewer cannot file a mark against the wrong one.
 
 Timestamps are relative to the **YouTube livestream start = 0**; the multicam angles
 are aligned to that same zero point in Final Cut Pro.
